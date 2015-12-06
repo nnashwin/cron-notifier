@@ -3,7 +3,6 @@ let CronJob = require('cron').CronJob
 let fs = require('fs')
 
 let job = new CronJob({
-  // cronTime: '* * * * * *',
   cronTime: '00 50 10 * 1-5',
   onTick: () => {
     let child = spawn('./write_message.sh', [])
