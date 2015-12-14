@@ -1,19 +1,24 @@
-let spawn = require('child_process').spawn
+import { mailOptions, transporter, randomizer, nameArr } from './mailer.js'
 let CronJob = require('cron').CronJob
 let fs = require('fs')
-
 let job = new CronJob({
-  cronTime: '00 50 10 * 1-5',
+  cronTime: '* 55 10 * * 1-5',
   onTick: () => {
-    let child = spawn('./write_message.sh', [])
+    mailOptions.from = `${randomizer(nameArr)} <lupin3.ken@gmail.com>`
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('error')
+        return console.log(error)
+      }
+      console.log('Message sent: ' + info.response)
+    })
     fs.readFile('./pidNumber.json', (err, data) => {
       if (err) throw err
       let dataObj = JSON.parse(data)
       let date = new Date()
-      dataObj["lastCron"] = {'childPid': child.pid, 'date': date}
+      dataObj["lastCron"] = {'date': date}
       fs.writeFile('./pidNumber.json', JSON.stringify(dataObj), (err, data) => {
         if (err) throw err
-        console.log(data)
       })
     })
   },
