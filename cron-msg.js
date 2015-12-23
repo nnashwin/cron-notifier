@@ -2,7 +2,7 @@ import { mailOptions, transporter, randomizer, nameArr } from './mailer.js'
 let CronJob = require('cron').CronJob
 let fs = require('fs')
 let job = new CronJob({
-  cronTime: '* 55 10 * * 1-5',
+  cronTime: '30 55 18 * * 1-5',
   onTick: () => {
     mailOptions.from = `${randomizer(nameArr)} <lupin3.ken@gmail.com>`
     transporter.sendMail(mailOptions, (error, info) => {
@@ -23,8 +23,7 @@ let job = new CronJob({
     })
   },
   onComplete: null,
-  start: false,
-  timezone: 'Asia/Taipei'
+  start: false
 })
 
 job.start()
